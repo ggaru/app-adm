@@ -1,0 +1,38 @@
+DADOS DE UM REQUERIMENTO
+
+Tabela Requerimento
+Id_Requerimento -- AUTO ENUMERADO
+Beneficiado -- NUMERAL
+Responsável -- NUMERAL
+Data do Requerimento -- DATA/HORA
+Observação - TEXTO
+Finalidade- TEXTO
+Dt_Digitação - DATA/HORA
+
+Tabela Beneficiado
+Id_Beneficiado -- AUTO ENUMERADO
+Nome -- TEXTO
+
+Tabela Responsavel
+Id_Responsavel -- AUTO ENUMERADO
+Nome -- TEXTO
+
+Tabela Forma_de_Pagamento
+Id_Forma_de_Pagamento -- AUTO ENUMERADO
+Id_Requerimento -- NUMERAL
+Tipo de Pagamento -- NUMERAL
+Valor - MOEDA
+Detalhamento - TEXTO
+
+Tabela Iten_Requerido
+Id_Item_Requerido -- AUTO ENUMERADO
+Quantidade  -- NUMERAL
+Unidade  -- TEXTO
+Descrição -- TEXTO
+Valor Unitário -= MOEDA
+Id_Requerimento -- NUMERAL
+
+
+Tabela Tipo_de_Pagamento
+Id_Tipo_de_Pagamento -- AUTO ENUMERADO
+Nome -- TEXTO
