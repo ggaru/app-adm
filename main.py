@@ -1,114 +1,137 @@
 import pyodbc
+import webview
 
-connection_string =  (
-    r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-    r'DBQ=Requerimento MATERIAL.accdb;'
-    )
-connection = pyodbc.connect(connection_string)
-cursor = connection.cursor()
+# connection_string =  (
+#     r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+#     r'DBQ=Requerimento MATERIAL.accdb;'
+#     )
+# connection = pyodbc.connect(connection_string)
+# cursor = connection.cursor()
+# def evaluate_js(window):
+#     result = window.evaluate_js(
+#         r"""
+#         var h1 = document.createElement('h1')
+#         var text = document.createTextNode('Hello pywebview')
+#         h1.appendChild(text)
+#         document.body.appendChild(h1)
+
+#         document.body.style.backgroundColor = '#212121'
+#         document.body.style.color = '#f2f2f2'
+
+#         // Return user agent
+#         'User agent:\n' + navigator.userAgent;
+#         """
+#     )
+
+#     print(result)
+
+window = webview.create_window('App-sede','frontend/pages/home.html')
+webview.start(window)
+# anything below this line will be executed after program is finished executing
+pass
 
 
-# for table_info in cursor.tables(tableType='TABLE'):
-#     print(table_info.table_name)
+# # for table_info in cursor.tables(tableType='TABLE'):
+# #     print(table_info.table_name)
 
 
-#CRIAÇÃO DE UM REQUERIMENTO NOVO E ENVIO AO BD
-# sql = "INSERT INTO [Requerimento] ([Beneficiado], [Responsável], [Finalidade], [Data do Requerimento]) VALUES (?, ?, ?, ?)"
-# cursor.execute(sql, (193, 1, 'Compra de material', '10/05/2026'))
-# connection.commit()
+# #CRIAÇÃO DE UM REQUERIMENTO NOVO E ENVIO AO BD
+# # sql = "INSERT INTO [Requerimento] ([Beneficiado], [Responsável], [Finalidade], [Data do Requerimento]) VALUES (?, ?, ?, ?)"
+# # cursor.execute(sql, (193, 1, 'Compra de material', '10/05/2026'))
+# # connection.commit()
 
 
 
-# cursor.execute("select Nome from Beneficiado")
-# row = cursor.fetchall()
-# if row:
-#     print(row)
+# # cursor.execute("select Nome from Beneficiado")
+# # row = cursor.fetchall()
+# # if row:
+# #     print(row)
 
-# cursor.execute("select Nome, Dt_Digitação  from Beneficiado")
-# row = cursor.fetchone()
-# print("Data: ", row[1])
-# print("name: ", row.Nome)
+# # cursor.execute("select Nome, Dt_Digitação  from Beneficiado")
+# # row = cursor.fetchone()
+# # print("Data: ", row[1])
+# # print("name: ", row.Nome)
 
 
-# cursor.execute("select Nome, Dt_Digitação  from Beneficiado")
-# while True:
-#     row = cursor.fetchone()
-#     if not row:
-#         break
-#     print('Nome:', row.Nome)
+# # cursor.execute("select Nome, Dt_Digitação  from Beneficiado")
+# # while True:
+# #     row = cursor.fetchone()
+# #     if not row:
+# #         break
+# #     print('Nome:', row.Nome)
 
-##variaveis uteis
-ID_REQ = "Id_Requerimento"
-BEN = "Beneficiado"
-RESP = "Responsável"
-OBS = "Observação"
-FIN = "Finalidade"
+# ##variaveis uteis
+# ID_REQ = "Id_Requerimento"
+# BEN = "Beneficiado"
+# RESP = "Responsável"
+# OBS = "Observação"
+# FIN = "Finalidade"
 
-## CONSULTAR REQUERIMENTO PELO ID
-def consultaId(id):
-    #cria um dicionário pra armazenar os dados do requerimento
-    req = {
-        "id:": "",
-        "Data:" : "",
-        "Beneficiado:": "",
-        "Responsavel:": "",
-        "Finalidade": "",
-        "Observação": "",
-    }
-    #pesquisa no requerimento 
-    sql = f"SELECT [{ID_REQ}], [Data do Requerimento], [{BEN}], [{RESP}], [{FIN}], [{OBS}]  from Requerimento where [{ID_REQ}] = ?"
-    cursor.execute(sql, (id,))
+# ## CONSULTAR REQUERIMENTO PELO ID
+# def consultaId(id):
+#     #cria um dicionário pra armazenar os dados do requerimento
+#     req = {
+#         "id:": "",
+#         "Data:" : "",
+#         "Beneficiado:": "",
+#         "Responsavel:": "",
+#         "Finalidade": "",
+#         "Observação": "",
+#     }
+#     #pesquisa no requerimento 
+#     sql = f"SELECT [{ID_REQ}], [Data do Requerimento], [{BEN}], [{RESP}], [{FIN}], [{OBS}]  from Requerimento where [{ID_REQ}] = ?"
+#     cursor.execute(sql, (id,))
 
     
-    #resgata o resultado da execução
-    result = cursor.fetchone()
+#     #resgata o resultado da execução
+#     result = cursor.fetchone()
 
 
-    if id in result:
-        print("passa")
-    else:
-        print("não passa")
-    #colocando os valores no dicionario e retorno eles 
-    if result:
-        for i,j  in zip(req, result):
-            req[i] = j
+#     if id in result:
+#         print("passa")
+#     else:
+#         print("não passa")
+#     #colocando os valores no dicionario e retorno eles 
+#     if result:
+#         for i,j  in zip(req, result):
+#             req[i] = j
     
   
 
-    #buscando no Beneficiado o que tiver o id do requerimento
-    beneficiado = req["Beneficiado:"]
-    sql = f"SELECT [Nome] from Beneficiado WHERE [Id_Beneficiado] = ?"
-    cursor.execute(sql, (beneficiado))
-    beneficiado = cursor.fetchone()
-    req["Beneficiado:"] = beneficiado[0]
+#     #buscando no Beneficiado o que tiver o id do requerimento
+#     beneficiado = req["Beneficiado:"]
+#     sql = f"SELECT [Nome] from Beneficiado WHERE [Id_Beneficiado] = ?"
+#     cursor.execute(sql, (beneficiado))
+#     beneficiado = cursor.fetchone()
+#     req["Beneficiado:"] = beneficiado[0]
 
-    #fazendoa  mesma alteração para o responsável
-    responsavel = req["Responsavel:"]
-    sql = f"SELECT [Nome] from Responsavel WHERE [Id_Responsavel] = ?"
-    cursor.execute(sql, (responsavel))
-    responsavel = cursor.fetchone()
-    req["Responsavel:"] = responsavel[0]
+#     #fazendoa  mesma alteração para o responsável
+#     responsavel = req["Responsavel:"]
+#     sql = f"SELECT [Nome] from Responsavel WHERE [Id_Responsavel] = ?"
+#     cursor.execute(sql, (responsavel))
+#     responsavel = cursor.fetchone()
+#     req["Responsavel:"] = responsavel[0]
 
-    for i in req:
-        print(f"{i} : {req[i]}")
-    consulta_items(result, req)
+#     for i in req:
+#         print(f"{i} : {req[i]}")
+#     consulta_items(result, req)
 
-def consulta_items(result, req):
-    print("-------------------------------------")
-    id = req["id:"]
-    sql = f"SELECT [Quantidade], [Descrição], [Valor Unitário] FROM Iten_Requerido WHERE [Id_Requerimento] = ?"
-    cursor.execute(sql, (id))
-    itens = cursor.fetchall()
-    itens_names = ["Quantidade", "Descrição", "Valor Unitário"]
-    print(itens_names[0] +"  ||  " + itens_names[1] +"  ||  "+ itens_names [2])
-    for i in itens:
-        list_itens = []
-        for j in i:
-            list_itens.append(j)
-        print(f"{list_itens[0]}    ||    {list_itens[1]}    ||    {list_itens[2]}")
+# def consulta_items(result, req):
+#     print("-------------------------------------")
+#     id = req["id:"]
+#     sql = f"SELECT [Quantidade], [Descrição], [Valor Unitário] FROM Iten_Requerido WHERE [Id_Requerimento] = ?"
+#     cursor.execute(sql, (id))
+#     itens = cursor.fetchall()
+#     itens_names = ["Quantidade", "Descrição", "Valor Unitário"]
+#     print(itens_names[0] +"  ||  " + itens_names[1] +"  ||  "+ itens_names [2])
+#     for i in itens:
+#         list_itens = []
+#         for j in i:
+#             list_itens.append(j)
+#         print(f"{list_itens[0]}    ||    {list_itens[1]}    ||    {list_itens[2]}")
 
 
 
-while True:
-    id = int(input("Digite o id:"))
-    consultaId(id)
+# while True:
+#     id = int(input("Digite o id:"))
+#     consultaId(id)
