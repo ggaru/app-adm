@@ -2,7 +2,7 @@ import pyodbc
 
 connection_string =  (
     r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-    r'DBQ=C:\Users\vinic\OneDrive\CODE\PROJECTS\app-adm\Requerimento MATERIAL.accdb;'
+    r'DBQ=Requerimento MATERIAL.accdb;'
     )
 connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
@@ -48,7 +48,7 @@ FIN = "Finalidade"
 def consultaId(id):
     #cria um dicionário pra armazenar os dados do requerimento
     req = {
-        "id: ": "",
+        "id:": "",
         "Data:" : "",
         "Beneficiado:": "",
         "Responsavel:": "",
@@ -60,7 +60,6 @@ def consultaId(id):
     cursor.execute(sql, (id,))
 
     
-
     #resgata o resultado da execução
     result = cursor.fetchone()
 
@@ -92,6 +91,23 @@ def consultaId(id):
 
     for i in req:
         print(f"{i} : {req[i]}")
+    consulta_items(result, req)
+
+def consulta_items(result, req):
+    print("-------------------------------------")
+    id = req["id:"]
+    sql = f"SELECT [Quantidade], [Descrição], [Valor Unitário] FROM Iten_Requerido WHERE [Id_Requerimento] = ?"
+    cursor.execute(sql, (id))
+    itens = cursor.fetchall()
+    itens_names = ["Quantidade", "Descrição", "Valor Unitário"]
+    print(itens_names[0] +"  ||  " + itens_names[1] +"  ||  "+ itens_names [2])
+    for i in itens:
+        list_itens = []
+        for j in i:
+            list_itens.append(j)
+        print(f"{list_itens[0]}    ||    {list_itens[1]}    ||    {list_itens[2]}")
+
+
 
 while True:
     id = int(input("Digite o id:"))
